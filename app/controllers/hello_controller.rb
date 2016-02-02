@@ -10,4 +10,11 @@ class HelloController < ApplicationController
     # デバッグ用途などで使う文字列を出力するメソッド
     render text: 'こんにちは、世界！'
   end
+  
+  def view
+    @msg = 'こんにちは、世界！'
+    
+    # 以下のようにすれば、デフォルトの app/views/hello/view.html.erb ではなく、special.html.erb が呼び出される
+    # render 'hello/special'
+  end
 end
