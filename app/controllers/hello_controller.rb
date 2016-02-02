@@ -17,4 +17,8 @@ class HelloController < ApplicationController
     # 以下のようにすれば、デフォルトの app/views/hello/view.html.erb ではなく、special.html.erb が呼び出される
     # render 'hello/special'
   end
+  
+  def list
+    @books = Book.all
+  end
 end
