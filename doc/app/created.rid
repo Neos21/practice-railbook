@@ -1,0 +1,9 @@
+Mon, 28 Mar 2016 01:23:19 +0900
+README.rdoc	Tue, 02 Feb 2016 16:49:55 +0900
+app/controllers/application_controller.rb	Tue, 02 Feb 2016 16:49:55 +0900
+app/controllers/books_controller.rb	Mon, 28 Mar 2016 00:58:42 +0900
+app/controllers/hello_controller.rb	Tue, 02 Feb 2016 18:45:55 +0900
+app/helpers/application_helper.rb	Tue, 02 Feb 2016 16:49:55 +0900
+app/helpers/books_helper.rb	Mon, 28 Mar 2016 00:58:42 +0900
+app/helpers/hello_helper.rb	Tue, 02 Feb 2016 16:58:15 +0900
+app/models/book.rb	Mon, 28 Mar 2016 00:58:42 +0900

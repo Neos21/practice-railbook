@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   
+  resources :books
   # 全てのアクションメソッドが /controller/action/ の形式で呼び出せるようにするため match で URL パターンを作る
   # :id は任意のルートパラメータ。() 部分は省略可能
   match ':controller(/:action(/:id))', via: [ :get, :post, :patch ]

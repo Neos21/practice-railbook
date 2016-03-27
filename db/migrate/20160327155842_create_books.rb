@@ -5,8 +5,7 @@ class CreateBooks < ActiveRecord::Migration
       t.string :title
       t.integer :price
       t.string :publish
-      t.string :published
-      t.string :date
+      t.date :published
       t.boolean :cd
 
       t.timestamps null: false
