@@ -1,0 +1,121 @@
+▼2016-02-02
+
+2.1. アプリケーションの作成
+
+・rails new railbook
+    P22
+    railbook アプリケーションを作る
+
+・rails s (rails server)
+    P25
+    WEBrick というシンプルな HTTP サーバで動作確認できる。
+    http://localhost:3000/
+
+2.2. コントローラの基本
+
+・rails g controller hello (rails generate)
+    P27
+    hello コントローラを作る
+    app/controllers/hello_controller.rb など色々できる
+
+※rails destroy controller hello
+    P29
+    rails generate で作った一式のファイルをまとめて削除する
+
+・hello_controller.rb を書き換える
+    マジックコメントは Ruby 2.0 以降は不要らしい (P30)
+
+・ルーティング設定は /config/routes.rb に定義する
+    練習用に /controller/action/ で呼べるようにしておく
+    match ':controller(/:action(/:id))', via: [ :get, :post, :patch ]
+
+・http://localhost:3000/hello/index
+    Controller のみだがこれでアクセスできる
+    アクション名を省略してもアクセス可能
+
+2.3. ビューの基本
+
+・hello_controller.rb に view アクション追加
+    P35
+
+・テンプレートファイルを作る
+    P36
+    /app/views/ に「コントローラ名/アクション名.html.erb」で作る
+    → /hello/view.html.erb となる
+
+・http://localhost:3000/hello/view
+
+※rails generate controller hello show
+    とすれば、テンプレートファイル show.html.erb も自動生成できる
+    「hello index show new」など複数のアクションをまとめて生成することも可能
+
+※アクションメソッドで特に処理がない場合は、アクションメソッド自体を省略できる
+    /hello/nothing/ でアクセスした際、
+    hello コントローラの nothing アクションを探すが、それがなかったら
+    そのまま hello/nothing.html.erb テンプレートファイルを検索・実行してくれる
+    (勝手に色々やってくれすぎてついてけないぜ…ｗ)
+
+※レイアウトテンプレート
+    P40
+    /app/layouts/application.html.erb で head 要素とか持ってる。
+    個別のテンプレートファイルは body 内部だけ書いてあげればいい仕組み。
+    ※レイアウトの適用が嫌なら application.html.erb を削除 or リネームしてしまう。
+
+2.4. モデルの基本
+
+・O/R マッパーである Active Record 経由で DB に接続するには、config/database.yml で接続設定を定義する。
+
+・モデルクラスを作る
+    P48
+    rails g model book isbn:string title:string price:integer publish:string published date cd:boolean
+    /app/models/book.rb モデルクラスなどが生成される。
+
+・命名規則
+    P49
+    モデルクラス               先頭大文字・単数形  Book
+    モデルクラス (ファイル名)  先頭小文字・単数形  book.rb
+    テーブル                   先頭小文字・複数形  books
+    テストスクリプト           先頭小文字・単数形  book_test.rb
+
+・マイグレーション
+    P50
+    テーブルレイアウトを作成・変更する仕組み。
+    rake db:migrate
+    で、Rails がマイグレーションファイルを見て勝手にマイグレーションしてくれる。
+    間違えて2度叩いてしまっても、マイグレーション済のものは記憶しているので平気。
+    books テーブルができた。
+
+・フィクスチャ
+    P51
+    YAML 形式のテストデータを DB に流し込む仕組み。
+    サンプルファイルから books.yml をパクり、test/fixtures/ に上書きコピーする。
+    rake db:fixtures:load fixtures=books
+    books テーブルにデータが流し込めた
+
+※rails db (dbconsole)
+    P51
+    DB クライアントを起動できる
+    .tables          テーブル一覧
+    .schema books    テーブルの構造確認
+    SELECT * FROM books;
+    .quit            SQLite クライアント終了
+
+※id は自動連番、created_at, updated_at は Active Record が自動設定するのでこの名前を付けないこと
+
+・list アクションを追加
+    P53
+
+・テンプレートファイルを作る
+    P54
+
+・http://localhost:3000/hello/list
+    書籍リストが閲覧できる。
+    実行される SQL は WEBRick のコンソールで見られる
+
+・2.5. Rails の設定情報
+    P57
+    rake notes コマンドで TODO, FIXME, OPTIMIZE アノテーションが列挙できる
+    rake notes:todo のようにすればそのアノテーションだけ見られる
+    アノテーションは
+    # TODO: ほげほげ
+    のように普通のコメントとして書けば OK

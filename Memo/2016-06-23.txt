@@ -1,0 +1,78 @@
+▼2016-06-23
+
+P76 3.3. 詳細画面の作成 (Show アクション)
+
+・一覧の Show を押すと表示される画面のこと。
+  /app/controllers/books_controller.rb
+  ・before_action :set_book, only: [:show, :edit, :update, :destroy]
+    → show や edit などの前に set_book メソッドを実行しろということ。フィルタ。
+  ・/books/:id という URL パターンで show アクションが開ける。
+    params が URL 経由で渡されたパラメータの id を取得している。params[:id]
+    テンプレート (html.erb) で使えるように、テンプレート変数 @book に結果をセットする
+・/app/views/books/show.html.erb
+
+P79 3.4. 新規登録画面の作成 (New・Create アクション)
+
+・/app/views/books/new.html.erb
+  ・フォーム部分は <%= render 'form' %> の1行のみ。別のテンプレートを使う指示。
+    登録画面も編集画面も同じようなフォームになるから使い回すようにするのが基本。部分テンプレートと呼ぶ。
+・/app/views/books/_form.html.erb
+  アンスコ「_」で始めると部分テンプレートになる。
+  ・<%= form_for(@book) do |f| %>
+    モデルに関連付いたフォームを作るビューヘルパーの一つ、form_for メソッド。
+  ・<%= f.text_field :isbn %> など
+    「|f|」でブロック変数として f を定義。form_for メソッド配下で使える text_field メソッドなどと関連付ける。
+
+・登録画面を表示するのが new アクションメソッド、登録ボタンを押した時の登録処理が create アクションメソッド。
+  /app/controllers/books_controller.rb
+  ・def new
+      @book = Book.new
+    end
+    → new してからのメソッドを作っておかないと form_for でフォーム生成できない
+  ・def create
+      @book = Book.new(book_params)
+    → book_params はプライベートメソッド。
+    private
+      def book_params
+        params.require(:book).permit(:isbn, :title, :price, :publish, :published, :cd)
+      end
+    → Post 送信されたデータをまとめて取得するにはこうする。これでハッシュ (連想配列・マップみたいな) 形式の戻り値になる。
+       これをそのままコンストラクタに投げ込める。
+  ・if @book.save
+      format.html { redirect_to @book, notice: 'Book was successfully created.' }
+      format.json { render :show, status: :created, location: @book }
+    登録処理は boolean を返す。HTML で返却する場合は format.html を、JSON で返す時は format.json を読む。
+    redirect_to @book で登録したデータの詳細画面に飛ぶ。
+    show.html.erb の <p id="notice"><%= notice %></p> にメッセージが出る。
+
+P87 3.5. 編集画面の作成 (Edit・Update アクション)
+
+・編集画面を表示させる edit、更新する update アクション。
+  ・@book.update(book_params)
+    内部的には save を使っているようで、基本は登録と同じ。
+
+P92 3.6. 削除機能の確認 (Destroy アクション)
+
+・@book.destroy は戻り値ないみたい。
+
+P93 3.7. データベースの準備
+
+・ひとまず作成済の DB を削除する
+  rake db:drop:all
+・言われたとおりにモデルクラスを作る。サンプルファイルからコピペ
+rails generate migration CreateJoinTableAuthorBook author book
+rails generate scaffold user username:string password:string salt:string email:string dm:boolean roles:string reviews_count:integer
+rails generate scaffold author user:references name:string birth:date address:text ctype:string photo:binary 
+rails generate scaffold review book:references user:references body:text
+rails generate scaffold fan_comment author_no:integer name:string body:text deleted:boolean
+rails generate model memo memoable_type:string memoable_id:integer body:string
+rake db:migrate
+・フィクスチャでテストデータを生成する
+  サンプルから /test/fixtures/ に6ファイルの .yml を入れる。以下のコマンドで取り込み。
+rake db:fixtures:load
+・DB を確認する
+    rails dbconsole
+  テーブルをリスト表示
+    .tables
+  SQlite クライアントを終了
+    .quit

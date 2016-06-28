@@ -1,0 +1,62 @@
+▼2016-01-10
+
+・Ruby のインストール。
+・以下サイトで最新版で 64bit の「Ruby 2.2.3 (x64)」を選択。
+  ・http://rubyinstaller.org/downloads/
+  ・rubyinstaller-2.2.3-x64.exe
+・インストール時に以下2つにチェック。
+  ・Ruby の実行ファイルへ環境変数 PATH を設定する
+  ・.rb と .rbw ファイルを Ruby に関連づける
+・コマプロで確認。
+  > ruby -v
+  ruby 2.2.3p173 (2015-08-18 revision 51636) [x64mingw32]
+  > gem -v
+  2.4.5.1
+
+・SQLite の導入。
+・以下サイトで「sqlite-shell-win32-x86-3100000.zip」を選択。
+  ・http://www.sqlite.org/download.html
+  ・sqlite-shell-win32-x86-3100000.zip
+・解凍して出てきた sqlite3.exe を Ruby のバイナリフォルダにコピペ。
+  C:\Ruby22-x64\bin\
+・コマプロで
+  > sqlite3 -version
+  3.10.0 2016-01-06 11:01:07 fd0a50f0797d154fefff724624f00548b5320566
+
+・DevKit のインストール。
+・コンパイルが必要な gem のインストールとかに使ったりする。
+・以下サイトで「DevKit-mingw64-64-4.7.2-20130224-1432-sfx.exe」を選択。
+  ・http://rubyinstaller.org/downloads/
+  ・「For use with Ruby 2.0 and above (x64 - 64bits only)」
+  ・DevKit-mingw64-64-4.7.2-20130224-1432-sfx.exe
+・ファイルを実行したら C:\Ruby22-x64\devkit\ フォルダを作ってそこに解凍。
+・コマプロで C:\Ruby22-x64\devkit\ に移動し、以下を実行。
+  > ruby dk.rb init
+  > ruby dk.rb install
+・以下のメッセージが出てうまくインストールできなかったようなので、
+  Invalid configuration or no Rubies listed. Please fix 'config.yml' and rerun 'ruby dk.rb install'
+  config.yml の最終行に以下を追加。Ruby のインストールフォルダで良いらしい。
+  - C:\Ruby22-x64
+  ・参考：http://snoopopo.hatenablog.com/entry/2015/06/09/161603
+
+・Node.js のインストール。
+・以下サイトで Stable の .msi を選択。
+  ・https://nodejs.org/en/download/stable/
+  ・node-v5.4.0-x64.msi
+・コマプロで確認。
+  > node -v
+  v5.4.0
+
+・Ruby On Rails のインストール。
+・コマプロからインストール。10分くらいかかる。
+  > gem install rails
+・コマプロで確認。
+  > rails -v
+  Rails 4.2.5
+
+・書籍サンプルのダウンロード。
+  ・http://www.wings.msn.to/index.php/-/A-03/978-4-7741-6410-6/
+  ・samples.zip
+・開発サーバ経由でサンプルにアクセスするには以下を実行。
+  > cd \samples\railbook\
+  > bundle install

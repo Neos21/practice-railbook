@@ -1,0 +1,87 @@
+▼2016-03-28
+
+・久々なのでおさらい。このへんのファイルは自分で書いた。あとはコマンドばっかりか…。
+  /app/controllers/hello_controller.rb
+  /app/views/hello/list.html.erb
+  /app/views/hello/view.html.erb
+  /app/views/layouts/application.html.erb
+  /config/routes.rb
+
+・rails s でサーバ起動。
+  http://localhost:3000/
+
+・/config/routes.rb
+  ・ソース
+    # 全てのアクションメソッドが /controller/action/ の形式で呼び出せるようにするため match で URL パターンを作る
+    # :id は任意のルートパラメータ。() 部分は省略可能
+    match ':controller(/:action(/:id))', via: [ :get, :post, :patch ]
+  ・ルーティングってのが URL 設定のこと。今回は練習用に controller 名 / action 名 で呼べるようにしてる
+・/app/controllers/hello_controller.rb
+  ・これが /hello/ 部分になる。
+  ・ここで定義したメソッド (def index, def view, def list など) が /controller/action/ の action 部分。
+
+
+
+3.1. Scaffolding 機能によるアプリケーション開発
+
+・Scaffolding 機能で CRUD 機能を持ったアプリを簡単に作る。 (P62)
+・一部のファイルを消しておく (P63)。rails s でサーバを動かしているターミナルとは別のターミナルで操作。
+  $ rails destroy model book
+    invoke  active_record
+    remove    db/migrate/20160202093106_create_books.rb
+    remove    app/models/book.rb
+    invoke    test_unit
+    remove      test/models/book_test.rb
+    remove      test/fixtures/books.yml
+・DB (development.sqlite3) を消す。Rails サーバは閉じておこう。
+  $ rake db:drop
+
+・「rails generate scaffold」で books テーブルを操作する関連ファイルをまとめて作る (P64)
+  $ rails generate scaffold book isbn:string title:string price:integer publish:string published:date cd:boolean
+・マイグレーションによるテーブルの作成だけは別コマンド (P65)
+  $ rake db:migrate
+・これでできあがり。rails s でサーバを起動し http://localhost:3000/books を開くとページができてる。
+
+・config/routes.rb に
+    resources :books
+  という1行が増えている。
+  $ rake routes
+  で有効なルートが見られる。(P67 表3-1)
+
+
+
+3.2. 一覧画面の作成 (index アクション)
+
+・books#index アクションが /books で呼び出せるトップページ。 (P68)
+  ・/app/controllers/books_controller.rb
+      def index
+        @books = Book.all
+      end
+・テンプレートファイルは app/views/ 内にコントローラ名/アクション名.html.erb で作る。
+  →ERB を使って HTML を生成するテンプレート。
+・http://localhost:3000/books.json でアクセスすると index アクションの結果を JSON 形式で出力できる。
+  ・P:\Dev\Ruby\railbook\app\views\books\index.json.jbuilder
+    →JBuilder を使って JSON を生成するテンプレート、といえる。
+・rake routes で見た時に「/books(.:format)」という URI パターンだったことから、フォーマットをパラメータで渡せることが分かる。
+
+・index.html.erb テンプレート
+  /app/views/books/index.html.erb
+・ビューヘルパー：テンプレートを記述するときに焼きうだつメソッドたち。
+・<%= link_to 'Show', book %>
+  →<a href="<%= url %>"><%= text %></a> と書いても同じ。
+・<%= link_to('サポートサイト', 'http://help.com/', class: 'outer', title: '困った時はこちらへ！') %>
+  →<a href="http://help.com/" class="outer" title="困った時はこちらへ！">サポートサイト</a> になる。
+・link_to に書かれた book は each メソッドで取得された Book オブジェクト。
+  これを link_to に渡すと book.id (1 からの番号) を取得しようとするので、リンク先が /books/1/ や /books/2/ などになる。
+・<%= link_to 'Edit', edit_book_path(book) %>
+  <%= link_to 'New Book', new_book_path %>
+  →edit_book_path や new_book_path は routes.rb で resources メソッドを呼び出すと自動的に用意されるビューヘルパー。 (P73 表3-2)
+・<%= link_to 'Destroy', book, method: :delete, data: { confirm: 'Are you sure?' } %>
+  →data-confirm オプションでダイアログを出したり。Unobtrusive (控えめな) JavaScript。
+  →「method: :delete」method オプションで HTTP GET 以外のリクエストを生成できる。
+    DELETE メソッドを実行するような書き方だが、実際は内部的には POST が使われている (ブラウザが対応していないため)。
+
+・RDoc ドキュメンテーションコメントで仕様書を作る (P75)
+  $ rake doc:app で生成
+  $ rake doc:reapp で再作成。
+  /doc/app/index.html からアクセスできる。
