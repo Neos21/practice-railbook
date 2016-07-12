@@ -1,0 +1,40 @@
+▼2016-07-12
+
+ビュー開発
+
+P98 4.1. フォーム関連のビューヘルパー
+
+・アクションメソッドが存在しない場合、テンプレートファイルを直接見に行くようになっている。
+  例えば、view/keyword.html.erb というテンプレートは、アクションメソッドがなくても「/view/keyword」という URL で呼び出せる。
+  ・ところでルート設定はどこだったっけ？ → /config/routes.rb
+
+P99 4.1.1. フォーム生成の基礎
+
+・特定のモデルオブジェクトを編集するフォームは form_for
+・モデルに関係しない汎用的なフォームを作るには form_tag
+
+・form_tag
+  ・/app/views/ 配下に /view/keyword.html.erb を作る
+    # サーバ起動
+    $ rails s
+    → http://localhost:3000/view/keyword
+  ・/app/controllers/view_controller.rb を新規作成
+      form_tag メソッドを作成
+      /app/views/view/form_tag.html.erb を新規作成
+      → http://localhost:3000/view/form_tag
+
+P103 からは書籍のコードのコピペになるので特に作らず。本を読む。
+
+P131 4.2. 文字列/数値関連のビューヘルパー
+
+・P132 4.2.2. truncate メソッド：文字列を指定桁で切り捨てる。
+・P135 4.2.4. cycle メソッド：each ブロック内で値リストを順に出力する。テーブルの背景色を1行ごとに変えたい時に使える。
+・P136 4.2.5. highlight メソッド：指定の文章中にある指定の単語を mark 要素で囲む。
+
+・P140 4.2.9. sprintf メソッド：Ruby の組み込みメソッド。文字列の整形。
+
+P146 4.3. リンク関連のビューヘルパー
+
+・P150 4.3.3. link_to_if・link_to_unless：条件に応じてリンクを生成する
+
+P164 4.6. ビューヘルパーの自作
