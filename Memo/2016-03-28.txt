@@ -66,7 +66,7 @@
 
 ・index.html.erb テンプレート
   /app/views/books/index.html.erb
-・ビューヘルパー：テンプレートを記述するときに焼きうだつメソッドたち。
+・ビューヘルパー：テンプレートを記述するときに役立つメソッドたち。
 ・<%= link_to 'Show', book %>
   →<a href="<%= url %>"><%= text %></a> と書いても同じ。
 ・<%= link_to('サポートサイト', 'http://help.com/', class: 'outer', title: '困った時はこちらへ！') %>
